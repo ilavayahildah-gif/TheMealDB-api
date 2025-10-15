@@ -1,8 +1,9 @@
-import "tsconfig-paths/register";
-import "dotenv/config"
+import app from './app';
+import dotenv from 'dotenv';
+dotenv.config();
 
-import App from "app";
+const PORT = process.env.PORT ||5000;
 
-const app = new App;
-
-app.start();
+app.listen(PORT, () =>{
+    console.log('Server listening on http://localhost:${PORT}');
+});

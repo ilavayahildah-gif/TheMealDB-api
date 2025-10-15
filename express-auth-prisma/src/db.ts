@@ -1,8 +1,11 @@
-import { PrismaClient } from "@prisma/client";
+import {pool} from 'pg';
+import dotenv from 'dotenv';
+dotenv.config();
 
-const globalForPrisma = global as unknown as { prisma: PrismaClient };
+const pool = new pool({
+  connectionString: process.env.DATABASE_URL,
+});
 
-export const prisma =
-  globalForPrisma.prisma || new PrismaClient();
+export const query = (text:string, params?: any[]) => pool.query(text, params);
 
-if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
+export default pool;

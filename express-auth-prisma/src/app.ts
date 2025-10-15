@@ -1,48 +1,22 @@
-import express, { Express } from "express";
-import cookieParser from "cookie-parser";
-import cors from "cors";
-import authRoutes from "@routes/auth.routes";
-import appConfig from "@config/app.config";
-import userRoutes from "@routes/user.routes";
+import express from 'express';
+import passport from 'passport';
+import session from 'express-session';
+import dotenv from 'dotenv';
+import authRouter from './routes/auth';
+import mealsRouter = require('@routes/meals.routes');
 
-class App {
-    private app: Express;
+dotenv.config();
 
-    constructor() {
-        this.app = express()
+const app = express();
+app.use(express.json());
 
-        this.initMiddlewares();
-        this.initRoutes();
-    }
+app.use(session({secret: process.env.JWT_SECRET || 'secret', resave:false, saveUninitialized: }))
+app.use(passport.initialize());
+app.use(passport.session());
 
-    private initMiddlewares() {
-        this.app.use(express.json());
-        this.app.use(cookieParser());
-        this.app.use(cors({
-            origin: [
-                'http://localhost:3000', // your frontend url
-                'https://mywebsite.com' // your production url optional
-            ],
-            methods: ["GET", "POST", "DELETE"],
-            credentials: true
-        }))
-    }
+app.use('/auth', authRouter);
+app.use('/meals', mealsRouter);
 
-    private initRoutes() {
-        // /api/auth/*
-        this.app.use("/api/auth", authRoutes);
-        // /api/user/*
-        this.app.use("/api/user", userRoutes);
-    }
+app.get('/', (req, res) => res.json({ok:true, message:'Meal API'}));
 
-    public start() {
-        const { port, host } = appConfig;
-
-        this.app.listen(port, host, () => {
-            console.log(`server is running on http://${host}:${port}`);
-
-        })
-    }
-}
-
-export default App;
+export default app;
