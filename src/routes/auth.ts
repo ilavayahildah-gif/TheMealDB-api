@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 import passport, { Profile } from 'passport';
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import  Pool  from 'pg';
-import pool from 'db';
+import pool from '../db';
 
 
 dotenv.config();
@@ -20,7 +20,11 @@ clientID: process.env.GOOGLE_CLIENT_ID as string,
 clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
 callbackURL: process.env.GOOGLE_CALLBACK_URL as "http://localhost:3000/auth/google/callback",
 },
-async (accessToken:string, refreshToken:string, profile:Profile, done:(error:any, user?:any)) => {
+async (
+    accessToken:string,
+    refreshToken:string,
+    profile:Profile,
+    done:(error:any, user?: any)=> void) => {
 try {
 const user ={
     googleId: profile.id,
@@ -32,8 +36,8 @@ return done(null, user);
 } catch (err) {
 return done(err, undefined);
 }
-}
-));
+})
+);
 
 //Passport serialize/deserialize
 passport.serializeUser((user: any, done) => {
@@ -67,9 +71,11 @@ router.get(
         throw new Error("JWT_SECRET is not defined in environment variables");
     }
 
-    const token = jwt.sign(payload, secret, {
-        expiresIn: process.env.JWT_EXPIRES_IN || "1h",
-    });
+    const token = jwt.sign(
+        {id: user.id, email: user.email, name: user.name},
+        process.env.JWT_SECRET as string,
+        {expiresIn: "1h"}
+    );
 
     // You can redirect to your frontend or just return token as JSON
     res.json({ token });

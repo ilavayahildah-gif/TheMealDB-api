@@ -1,11 +1,8 @@
 import express from 'express';
 import passport from 'passport';
 import session from 'express-session';
-import dotenv from 'dotenv';
 import authRoutes from './routes/auth';
 import mealsRoutes from './routes/meals.routes';
-
-dotenv.config();
 
 const app = express();
 app.use(express.json());

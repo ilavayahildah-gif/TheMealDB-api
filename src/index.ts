@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import mealsRoutes from "./routes/meals.routes";
 import authRoutes from "./routes/auth";
 
-dotenv.config();
+dotenv.config({quiet:true});
 const app = express();
 
 app.use("/auth", authRoutes);

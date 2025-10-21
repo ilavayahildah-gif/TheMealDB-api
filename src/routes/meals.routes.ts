@@ -1,5 +1,5 @@
 import express from 'express';
-import { jwtAuth, AuthRequest } from '../middleware/jwtAuth';
+import {jwtAuth, AuthRequest } from '../middleware/jwtauth.middleware';
 import { query } from '../db';
 
 

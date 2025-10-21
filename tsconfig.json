@@ -2,13 +2,14 @@
   // Visit https://aka.ms/tsconfig to read more about this file
   "compilerOptions": {
     // File Layout
-    "rootDir": "src",
-    "outDir": "dist",
-    "ignoreDeprecations": "5.0",
-
-    "baseUrl": "src",
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "baseUrl": "./src",
+    "ignoreDeprecations":"6.0",
     "paths": {
+      "db":["db"],
       "@config/*":["config/*"],
+      "@controllers/*":["controllers/*"],
       "@middlewares/*": ["middlewares/*"],
       "@routes/*": ["routes/*"],
       "@utils/*": ["utils/*"]

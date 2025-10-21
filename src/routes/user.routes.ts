@@ -1,6 +1,7 @@
-import BaseRouter, { RouteConfig } from "../router";
-import AuthMiddleware from "../middleware/jwtauth.middleware";
+import BaseRouter, { RouteConfig } from "../routes/baserouter";
+import {AuthMiddleware, jwtAuth} from "../middleware/jwtauth.middleware";
 import UserController from "../controllers/user.controller";
+import router from "./meals.routes";
 
 class UserRoutes extends BaseRouter {
     protected routes(): RouteConfig[] {
@@ -14,7 +15,7 @@ class UserRoutes extends BaseRouter {
                 ],
                 handler: UserController.getUser
             },
-        ]
+        ];
     }
 }
 
