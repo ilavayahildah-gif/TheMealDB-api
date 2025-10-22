@@ -9,19 +9,24 @@
     "start": "node dist/index.js"
   },
   "devDependencies": {
+    "@types/csv-parse": "^1.1.12",
     "@types/dotenv": "^6.1.1",
     "@types/express": "^5.0.3",
     "@types/express-session": "^1.18.2",
     "@types/jsonwebtoken": "^9.0.10",
+    "@types/multer": "^2.0.0",
     "@types/node": "^24.7.2",
     "@types/passport": "^1.0.17",
     "@types/passport-google-oauth20": "^2.0.16",
     "@types/pg": "^8.15.5",
+    "@types/utils": "file:types/zod@types/v4@types/locales",
     "ts-node-dev": "^2.0.0",
     "tsconfig-paths": "^4.2.0",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "zod": "^4.1.12"
   },
   "dependencies": {
+    "@fast-csv/format": "^5.0.5",
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
