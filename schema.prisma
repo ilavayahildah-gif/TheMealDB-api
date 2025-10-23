@@ -39,3 +39,19 @@ model Recipe {
   user User @relation(fields: [userId], references: [id])
 }
 
+model Order {
+  id         Int      @id @default(autoincrement())
+  userId     Int
+  mealId     Int?     // optional - if it's a meal order
+  recipeId   Int?     // optional - if it's a recipe order
+  quantity   Int
+  totalPrice Float
+  status     String   @default("pending")
+  createdAt  DateTime @default(now())
+
+  user    User    @relation(fields: [userId], references: [id])
+  meal    Meal?   @relation(fields: [mealId], references: [id])
+  recipe  Recipe? @relation(fields: [recipeId], references: [id])
+}
+
+

@@ -21,6 +21,7 @@
     "@types/passport-google-oauth20": "^2.0.16",
     "@types/pg": "^8.15.5",
     "@types/utils": "file:types/zod@types/v4@types/locales",
+    "express-rate-limit": "^8.1.0",
     "ts-node-dev": "^2.0.0",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.9.3",

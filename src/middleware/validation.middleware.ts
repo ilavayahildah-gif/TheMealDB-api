@@ -52,3 +52,11 @@ export const validateRegister = (req: Request, res: Response, next: NextFunction
 
     next();
 };
+
+//order validations
+export const validateOrderInput = (req: Request, res: Response, next: NextFunction) => {
+    const { item, quantity, price } = req.body;
+    if (!item || !quantity || !price)
+        return res.status(400).json({ error: "Item, quantity, and price are required" });
+    next();
+};
