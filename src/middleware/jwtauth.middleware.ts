@@ -1,32 +1,26 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 
-export interface AuthRequest extends Request{
-    user?:any;
-}
+const JWT_SECRET = process.env.JWT_SECRET || "supersecretkey";
 
-export class AuthMiddleware {
-    static authenticateUser(req: Request, res: Response, next: NextFunction){
-    const authHeader = req.headers.authorization;
-
-    if (!authHeader) {
-        return res.status(401).json({ message: "Missing Authorization header" });
+// Extend Express Request to include user
+export interface AuthRequest extends Request {
+    user?: any;
     }
 
-    const token = authHeader.split(" ")[1];
+    export const jwtAuth = (req: AuthRequest, res: Response, next: NextFunction) => {
+    const authHeader = req.headers["authorization"];
+    const token = authHeader && authHeader.split(" ")[1]; // "Bearer <token>"
+
     if (!token) {
-        return res.status(401).json({ message: "Invalid token format" });
+        return res.status(401).json({ error: "Missing token" });
     }
 
     try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET || "secret");
-        (req as any).user = decoded;
+        const decoded = jwt.verify(token, JWT_SECRET);
+        req.user = decoded;
         next();
-    } catch (error) {
-        return res.status(403).json({ message: "Invalid or expired token" });
+    } catch (err) {
+        return res.status(401).json({ error: "Invalid or expired token" });
     }
-    }
-}
-
-export const jwtAuth = AuthMiddleware.authenticateUser
-
+};
