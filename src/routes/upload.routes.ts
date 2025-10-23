@@ -2,7 +2,7 @@ import BaseRouter, { RouteConfig } from "../routes/router";
 
 import {upload} from "../middleware/upload.middleware";
 import UploadController from "../controllers/upload.controller";
-import {AuthMiddleware} from "../middleware/jwtauth.middleware";
+import {authenticateJWT} from "../middleware/jwtauth.middleware";
 import express from 'express';
 
 const router = express.Router();

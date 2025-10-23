@@ -27,3 +27,15 @@ model Meal {
 
   user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
 }
+
+model Recipe {
+  id           Int      @id @default(autoincrement())
+  userId       Int
+  name         String
+  ingredients  String
+  instructions String
+  createdAt    DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+}
+

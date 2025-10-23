@@ -39,3 +39,16 @@ export const validateRegister = (req: Request, res: Response, next: NextFunction
 
     next();
 };
+
+//recipe validation
+    export const validateRecipeInput = (req: Request, res: Response, next: NextFunction) => {
+    const { ingredients } = req.body;
+
+    if (!ingredients || !Array.isArray(ingredients) || ingredients.length === 0) {
+        return res.status(400).json({
+        error: "Ingredients are required and must be a non-empty array."
+        });
+    }
+
+    next();
+};
