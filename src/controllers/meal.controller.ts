@@ -18,7 +18,7 @@ export class MealController {
             name,
             calories: calories ? Number(calories) : null,
             notes: notes || null,
-            userId: user.id,
+            user_id: user.id,
             },
         });
 
@@ -37,8 +37,8 @@ export class MealController {
         const user = req.user;
         try {
         const meals = await prisma.meal.findMany({
-            where: { userId: user.id },
-            orderBy: { createdAt: "desc" },
+            where: { user_id: user.id },
+            orderBy: { created_at: "desc" },
         });
 
         res.json(meals);
@@ -58,7 +58,7 @@ export class MealController {
 
         try {
         const meal = await prisma.meal.findFirst({
-            where: { id, userId: user.id },
+            where: { id, user_id: user.id },
         });
 
         if (!meal) return res.status(404).json({ error: "Meal not found" });
@@ -82,7 +82,7 @@ export class MealController {
         try {
         // Check if meal exists and belongs to user
         const existingMeal = await prisma.meal.findFirst({
-            where: { id, userId: user.id },
+            where: { id, user_id: user.id },
         });
 
         if (!existingMeal)
@@ -117,7 +117,7 @@ export class MealController {
         try {
         // Ensure meal belongs to this user
         const meal = await prisma.meal.findFirst({
-            where: { id, userId: user.id },
+            where: { id, user_id: user.id },
         });
 
         if (!meal)

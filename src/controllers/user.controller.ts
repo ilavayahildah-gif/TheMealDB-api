@@ -9,9 +9,9 @@ const JWT_SECRET = process.env.JWT_SECRET || "supersecretkey";
 export class UserController {
   //Register a new user
   static async register(req: Request, res: Response) {
-    const { name, email, password } = req.body;
+    const { first_name,last_name, email, password } = req.body;
 
-    if (!name || !email || !password) {
+    if (!first_name || !last_name || !email || !password) {
       return res.status(400).json({ error: "All fields are required" });
     }
 
@@ -27,8 +27,13 @@ export class UserController {
 
       // Create user
       const user = await prisma.user.create({
-        data: { name, email, password: hashedPassword },
-        select: { id: true, name: true, email: true, createdAt: true },
+        data: {
+          first_name,
+          last_name,
+          email,
+          password: hashedPassword
+        },
+        select: { id: true, first_name: true, last_name:true, email: true, created_at: true },
       });
 
       return res.status(201).json(user);
@@ -65,7 +70,7 @@ export class UserController {
       return res.json({
         message: "Login successful",
         token,
-        user: { id: user.id, name: user.name, email: user.email },
+        user: { id: user.id, full_name: '${user.first_name} ${user.last_name}', email: user.email },
       });
     } catch (error: any) {
       console.error("Database error:", error);
@@ -83,14 +88,23 @@ export class UserController {
     try {
       const profile = await prisma.user.findUnique({
         where: { id: user.id },
-        select: { id: true, name: true, email: true, createdAt: true },
+        select: {
+          id: true,
+          first_name: true,
+          last_name:true,
+          email: true,
+          created_at: true
+        },
       });
 
       if (!profile) {
         return res.status(404).json({ error: "User not found" });
       }
 
-      return res.json(profile);
+      return res.json({
+        profile,
+        full_name:'${profile.first_name} ${profile.last_name}',
+      });
     } catch (error: any) {
       console.error("Database error:", error);
       return res.status(500).json({

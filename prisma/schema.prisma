@@ -10,11 +10,14 @@ datasource db {
 
 model User {
   id         Int      @id @default(autoincrement())
-  name       String
+  first_name String
+  last_name  String
   email      String   @unique
   password   String
   created_at DateTime @default(now())
-  meals      Meal[]   // Relation: one user → many meals
+  meals      Meal[] // Relation: one user → many meals
+  recipies   Recipe[]
+  order      Order[]
 }
 
 model Meal {
@@ -23,35 +26,38 @@ model Meal {
   calories   Int?
   notes      String?
   created_at DateTime @default(now())
+  updatedAt  DateTime @updatedAt
   user_id    Int
 
-  user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user  User    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  Order Order[]
 }
 
 model Recipe {
   id           Int      @id @default(autoincrement())
   userId       Int
   name         String
+  description  String
   ingredients  String
   instructions String
   createdAt    DateTime @default(now())
 
-  user User @relation(fields: [userId], references: [id])
+  user  User    @relation(fields: [userId], references: [id])
+  Order Order[]
 }
 
 model Order {
   id         Int      @id @default(autoincrement())
   userId     Int
-  mealId     Int?     // optional - if it's a meal order
-  recipeId   Int?     // optional - if it's a recipe order
+  mealId     Int? // optional - if it's a meal order
+  recipeId   Int? // optional - if it's a recipe order
   quantity   Int
   totalPrice Float
   status     String   @default("pending")
   createdAt  DateTime @default(now())
 
-  user    User    @relation(fields: [userId], references: [id])
-  meal    Meal?   @relation(fields: [mealId], references: [id])
-  recipe  Recipe? @relation(fields: [recipeId], references: [id])
+  //Relations(optional)
+  user   User    @relation(fields: [userId], references: [id])
+  meal   Meal?   @relation(fields: [mealId], references: [id])
+  recipe Recipe? @relation(fields: [recipeId], references: [id])
 }
-
-

@@ -19,17 +19,23 @@ export class OrderController {
       return res.status(400).json({ error: "Quantity must be greater than 0" });
 
     try {
-      // Determine item type and fetch its details
-      let item, price = 0, itemType = "";
+// Cast values to numbers (TypeScript + Prisma safety)
+      const parsedMealId = mealId ? Number(mealId) : null;
+      const parsedRecipeId = recipeId ? Number(recipeId) : null;
+      const parsedQuantity = Number(quantity);
 
-      if (mealId) {
+      let item = null;
+      let price = 0;
+      let itemType = "";
+
+      if (parsedMealId) {
         item = await prisma.meal.findFirst({
-          where: { id: mealId, userId: user.id },
+          where: { id: parsedMealId, user_id: user.id },
         });
         itemType = "meal";
-      } else if (recipeId) {
+      } else if (parsedRecipeId) {
         item = await prisma.recipe.findFirst({
-          where: { id: recipeId, userId: user.id },
+          where: { id: parsedRecipeId, user_id: user.id },
         });
         itemType = "recipe";
       }
@@ -42,10 +48,10 @@ export class OrderController {
 
       const order = await prisma.order.create({
         data: {
-          userId: user.id,
-          mealId: mealId || null,
-          recipeId: recipeId || null,
-          quantity,
+          userId: Number(user.id),
+          mealId: parsedMealId,
+          recipeId: parsedRecipeId,
+          quantity:parsedQuantity,
           totalPrice: price,
         },
         include: {

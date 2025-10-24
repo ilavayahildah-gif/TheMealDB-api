@@ -10,7 +10,7 @@ const router = express.Router();
 router.post("/register", validateRegister,UserController.register);
 router.post("/login", validateLogin,UserController.login);
 router.get("/profile", authenticateJWT, UserController.profile);
-router.post("/", authenticateJWT, validateOrderInput, OrderController.createOrder);
+router.post("/order", authenticateJWT, validateOrderInput, OrderController.createOrder);
 
 
 export default router;
