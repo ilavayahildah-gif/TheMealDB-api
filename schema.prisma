@@ -10,11 +10,16 @@ datasource db {
 
 model User {
   id         Int      @id @default(autoincrement())
-  name       String
+  first_name String
+  last_name  String
   email      String   @unique
   password   String
   created_at DateTime @default(now())
-  meals      Meal[]   // Relation: one user → many meals
+
+  // Relation: one user → many meals
+  meals   Meal[]
+  recipes Recipe[]
+  orders  Order[]
 }
 
 model Meal {
@@ -22,10 +27,13 @@ model Meal {
   name       String
   calories   Int?
   notes      String?
+  stock      Int   @default(20)  //default meal stock
   created_at DateTime @default(now())
   user_id    Int
 
-  user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  //relation back to user
+  user   User    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  orders Order[]
 }
 
 model Recipe {
@@ -34,24 +42,26 @@ model Recipe {
   name         String
   ingredients  String
   instructions String
+  stock        Int    @default(15)   //default recipe stock
   createdAt    DateTime @default(now())
 
-  user User @relation(fields: [userId], references: [id])
+  //relation back to user
+  user  User    @relation(fields: [userId], references: [id])
+  order Order[]
 }
 
 model Order {
   id         Int      @id @default(autoincrement())
   userId     Int
-  mealId     Int?     // optional - if it's a meal order
-  recipeId   Int?     // optional - if it's a recipe order
+  mealId     Int? // optional - if it's a meal order
+  recipeId   Int? // optional - if it's a recipe order
   quantity   Int
   totalPrice Float
   status     String   @default("pending")
   createdAt  DateTime @default(now())
 
-  user    User    @relation(fields: [userId], references: [id])
-  meal    Meal?   @relation(fields: [mealId], references: [id])
-  recipe  Recipe? @relation(fields: [recipeId], references: [id])
+  //relations
+  user   User    @relation(fields: [userId], references: [id])
+  meal   Meal?   @relation(fields: [mealId], references: [id])
+  recipe Recipe? @relation(fields: [recipeId], references: [id])
 }
-
-
