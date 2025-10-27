@@ -15,17 +15,11 @@ model User {
   email      String   @unique
   password   String
   created_at DateTime @default(now())
-<<<<<<< HEAD:prisma/schema.prisma
-  meals      Meal[] // Relation: one user → many meals
-  recipies   Recipe[]
-  order      Order[]
-=======
 
   // Relation: one user → many meals
   meals   Meal[]
   recipes Recipe[]
   orders  Order[]
->>>>>>> 044483ff8d5ec419d44014ddbbd700e3620b15f5:schema.prisma
 }
 
 model Meal {
@@ -38,14 +32,9 @@ model Meal {
   updatedAt  DateTime @updatedAt
   user_id    Int
 
-<<<<<<< HEAD:prisma/schema.prisma
-  user  User    @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  Order Order[]
-=======
   //relation back to user
   user   User    @relation(fields: [user_id], references: [id], onDelete: Cascade)
   orders Order[]
->>>>>>> 044483ff8d5ec419d44014ddbbd700e3620b15f5:schema.prisma
 }
 
 model Recipe {
@@ -58,14 +47,9 @@ model Recipe {
   stock        Int    @default(15)   //default recipe stock
   createdAt    DateTime @default(now())
 
-<<<<<<< HEAD:prisma/schema.prisma
-  user  User    @relation(fields: [userId], references: [id])
-  Order Order[]
-=======
   //relation back to user
   user  User    @relation(fields: [userId], references: [id])
   order Order[]
->>>>>>> 044483ff8d5ec419d44014ddbbd700e3620b15f5:schema.prisma
 }
 
 model Order {
@@ -78,11 +62,7 @@ model Order {
   status     String   @default("pending")
   createdAt  DateTime @default(now())
 
-<<<<<<< HEAD:prisma/schema.prisma
-  //Relations(optional)
-=======
   //relations
->>>>>>> 044483ff8d5ec419d44014ddbbd700e3620b15f5:schema.prisma
   user   User    @relation(fields: [userId], references: [id])
   meal   Meal?   @relation(fields: [mealId], references: [id])
   recipe Recipe? @relation(fields: [recipeId], references: [id])

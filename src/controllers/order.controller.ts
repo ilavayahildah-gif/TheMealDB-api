@@ -17,26 +17,6 @@ export class OrderController {
       return res.status(400).json({ error: "Quantity must be greater than 0" });
 
     try {
-<<<<<<< HEAD
-// Cast values to numbers (TypeScript + Prisma safety)
-      const parsedMealId = mealId ? Number(mealId) : null;
-      const parsedRecipeId = recipeId ? Number(recipeId) : null;
-      const parsedQuantity = Number(quantity);
-
-      let item = null;
-      let price = 0;
-      let itemType = "";
-
-      if (parsedMealId) {
-        item = await prisma.meal.findFirst({
-          where: { id: parsedMealId, user_id: user.id },
-        });
-        itemType = "meal";
-      } else if (parsedRecipeId) {
-        item = await prisma.recipe.findFirst({
-          where: { id: parsedRecipeId, user_id: user.id },
-        });
-=======
       let item, stock = 0, price = 0, itemType = "";
 
       if (mealId) {
@@ -44,7 +24,6 @@ export class OrderController {
         itemType = "meal";
       } else {
         item = await prisma.recipe.findUnique({ where: { id: recipeId } });
->>>>>>> 044483ff8d5ec419d44014ddbbd700e3620b15f5
         itemType = "recipe";
       }
 
@@ -59,22 +38,7 @@ export class OrderController {
       // calculate price (can be dynamic later)
       price = (itemType === "meal" ? 8.5 : 10.0) * quantity;
 
-<<<<<<< HEAD
-      const order = await prisma.order.create({
-        data: {
-          userId: Number(user.id),
-          mealId: parsedMealId,
-          recipeId: parsedRecipeId,
-          quantity:parsedQuantity,
-          totalPrice: price,
-        },
-        include: {
-          meal: true,
-          recipe: true,
-        },
-      });
-=======
-      // ⚙️ Use transaction to ensure stock & order remain consistent
+      //Use transaction to ensure stock & order remain consistent
       const [updatedItem, newOrder] = await prisma.$transaction([
         prisma[itemType].update({
           where: { id: item.id },
@@ -91,7 +55,6 @@ export class OrderController {
           include: { meal: true, recipe: true },
         }),
       ]);
->>>>>>> 044483ff8d5ec419d44014ddbbd700e3620b15f5
 
       res.status(201).json({
         message: `Order placed successfully for ${itemType}`,

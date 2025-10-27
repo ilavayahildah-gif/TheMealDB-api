@@ -2,7 +2,7 @@ import { Response } from "express";
 import { PrismaClient } from "@prisma/client/edge";
 import { AuthRequest } from "../middleware/jwtauth.middleware";
 import { error } from "console";
-import { success } from "zod";
+import { any, success } from "zod";
 
 const prisma=new PrismaClient();
 
@@ -19,11 +19,19 @@ export class RecipeController{
 
             //--step2: save recipe to database
             const recipe=await prisma.recipe.create({
+                //1.data: specify the fields to be saved to thee database
                 data:{
-                    userId: user.id,
+                    //use the foreign key to link the recipe to the user
+                    userId:user.id,
+
+                    //scalar fields for the recipe record
                     name:recipeName,
                     ingredients:ingredients.join(","),
                     instructions,
+                },
+                include:{
+                    //the relation fields (as defined in your schema.prisma)
+                    user: true,
                 },
             });
 
