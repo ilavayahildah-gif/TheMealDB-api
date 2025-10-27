@@ -4,9 +4,12 @@ import session from "express-session";
 import authRoutes from "./routes/auth.routes";
 import mealsRoutes from "./routes/meals.routes";
 import recipeRoutes from "./routes/recipe.routes";
+import receiptRoutes from "./routes/receipt.routes";
 
 const app = express();
 app.use(express.json());
+
+app.use("/api/receipts", receiptRoutes);
 
 app.use(
   session({

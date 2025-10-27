@@ -9,9 +9,15 @@ const JWT_SECRET = process.env.JWT_SECRET || "supersecretkey";
 export class UserController {
   //Register a new user
   static async register(req: Request, res: Response) {
+<<<<<<< HEAD
     const { first_name,last_name, email, password } = req.body;
 
     if (!first_name || !last_name || !email || !password) {
+=======
+    const { first_name, last_name, email, password } = req.body;
+
+    if (!first_name || !last_name|| !email || !password) {
+>>>>>>> 044483ff8d5ec419d44014ddbbd700e3620b15f5
       return res.status(400).json({ error: "All fields are required" });
     }
 
@@ -27,6 +33,7 @@ export class UserController {
 
       // Create user
       const user = await prisma.user.create({
+<<<<<<< HEAD
         data: {
           first_name,
           last_name,
@@ -34,6 +41,10 @@ export class UserController {
           password: hashedPassword
         },
         select: { id: true, first_name: true, last_name:true, email: true, created_at: true },
+=======
+        data: { first_name, last_name, email, password: hashedPassword },
+        select: { id: true, first_name: true, last_name: true, email: true, createdAt: true },
+>>>>>>> 044483ff8d5ec419d44014ddbbd700e3620b15f5
       });
 
       return res.status(201).json(user);
@@ -70,7 +81,11 @@ export class UserController {
       return res.json({
         message: "Login successful",
         token,
+<<<<<<< HEAD
         user: { id: user.id, full_name: '${user.first_name} ${user.last_name}', email: user.email },
+=======
+        user: { id: user.id, first_name: user.first_name, last_name:user.last_name, email: user.email },
+>>>>>>> 044483ff8d5ec419d44014ddbbd700e3620b15f5
       });
     } catch (error: any) {
       console.error("Database error:", error);
@@ -88,6 +103,7 @@ export class UserController {
     try {
       const profile = await prisma.user.findUnique({
         where: { id: user.id },
+<<<<<<< HEAD
         select: {
           id: true,
           first_name: true,
@@ -95,6 +111,9 @@ export class UserController {
           email: true,
           created_at: true
         },
+=======
+        select: { id: true, first_name: true, last_name: true, email: true, createdAt: true },
+>>>>>>> 044483ff8d5ec419d44014ddbbd700e3620b15f5
       });
 
       if (!profile) {

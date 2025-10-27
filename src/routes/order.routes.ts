@@ -5,19 +5,8 @@ import { recipeRateLimiter } from "../middleware/rateLimit.middleware";
 
 const router = Router();
 
-// Create order (for meal or recipe)
 router.post("/", authenticateJWT, recipeRateLimiter, OrderController.createOrder);
-
-// Get all orders for user
 router.get("/", authenticateJWT, OrderController.getOrders);
-
-// Get specific order
-router.get("/:id", authenticateJWT, OrderController.getOrderById);
-
-// Update order status
-router.put("/:id", authenticateJWT, OrderController.updateOrder);
-
-// Delete order
-router.delete("/:id", authenticateJWT, OrderController.deleteOrder);
+router.post("/:id/cancel", authenticateJWT, OrderController.cancelOrder); // 👈 cancel order route
 
 export default router;
