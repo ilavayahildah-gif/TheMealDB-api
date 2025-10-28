@@ -22,10 +22,11 @@ export class RecipeController{
                 //1.data: specify the fields to be saved to thee database
                 data:{
                     //use the foreign key to link the recipe to the user
-                    userId:user.id,
+                    userId:Number(user.id), //enusre it's number
 
                     //scalar fields for the recipe record
                     name:recipeName,
+                    description:"A tasty auto-generated recipe",  //required in schema
                     ingredients:ingredients.join(","),
                     instructions,
                 },

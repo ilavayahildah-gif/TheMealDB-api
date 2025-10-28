@@ -28,7 +28,7 @@ export class UserController {
       // Create user
       const user = await prisma.user.create({
         data: { first_name, last_name, email, password: hashedPassword },
-        select: { id: true, first_name: true, last_name: true, email: true, createdAt: true },
+        select: { id: true, first_name: true, last_name: true, email: true, created_at: true },
       });
 
       return res.status(201).json(user);
@@ -83,7 +83,7 @@ export class UserController {
     try {
       const profile = await prisma.user.findUnique({
         where: { id: user.id },
-        select: { id: true, first_name: true, last_name: true, email: true, createdAt: true },
+        select: { id: true, first_name: true, last_name: true, email: true, created_at: true },
       });
 
       if (!profile) {

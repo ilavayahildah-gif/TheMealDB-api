@@ -9,7 +9,7 @@ export class ReceiptController {
     try {
       const order = await prisma.order.findUnique({
         where: { id: Number(orderId) },
-        include: { user: true, items: true },
+        include: { user: true, meal: true },
       });
 
       if (!order) return res.status(404).json({ error: "Order not found" });
