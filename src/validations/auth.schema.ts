@@ -1,7 +1,4 @@
-import path from "path";
-import zod, { email } from "zod";
-
-import z from "zod";
+import { z } from "zod";
 
 const passwordSchema = z
     .string()
@@ -26,6 +23,7 @@ const usernameSchema = z
         message: "Username cannot contain speciaL characters like @$!%*?&",
     });
 
+    //login schema
 const login = z.object({
     email: z
         .string()
@@ -35,6 +33,8 @@ const login = z.object({
     password: z.string().min(1, "Password is required"),
     });
 
+
+    //resetPassword schema
 const resetPassword = z
     .object({
         new_password: passwordSchema,
@@ -42,11 +42,12 @@ const resetPassword = z
         .string()
         .min(1, "Password confirmation is required"),
     })
-    .refine((data: any) => data.new_password === data.confirm_new_password, {
+    .refine((data) => data.new_password === data.confirm_new_password, {
         path: ["confirm_new_password"],
         message: "Passwords do not match",
     });
 
+    //profile schema
     const profile=z
     .object({
         id:z.string().min(1, "User id is required"),
@@ -54,6 +55,8 @@ const resetPassword = z
         email:z.string().trim().min(1,"Email is required").email("Invalid email format"),
         password: z.string().min(1, "Password is required"),
     })
+
+//forgot_password schema
 const forgot_Password = z.object({
     email: z
         .string()
@@ -62,6 +65,7 @@ const forgot_Password = z.object({
         .email("Invalid email format"),
     });
 
+//registration schema
 const register = z
     .object({
         first_name: z.string().min(1, "First name is required"),
@@ -70,14 +74,33 @@ const register = z
         password: passwordSchema,
         confirm_password: z.string().min(1, "Password confirmation is required"),
     })
-    .refine((data: any) => data.password === data.confirm_password, {
+    .refine((data) => data.password === data.confirm_password, {
         path: ["confirm_password"],
         message: "Passwords do not match",
     });
 
-    const order=z.object({
-
+    //order schema
+    const order = z
+    .object({
+        mealId: z.number().int().positive().optional(),
+        recipeId: z.number().int().positive().optional(),
+        quantity: z.number().int().positive("Quantity must be greater than 0"),
     })
+    .refine((data) => data.mealId || data.recipeId, {
+        message: "Either mealId or recipeId is required",
+        path: ["mealId"], // attaches the error to mealId field
+    });
+
+    //recipe schema
+    const recipe = z.
+    object({
+        name: z.string().min(1, "Recipe name is required"),
+        description: z.string().min(1, "Recipe description is required"),
+        ingredients: z.string().min(1, "Ingredients are required"),
+        instructions: z.string().min(1, "Instructions are required"),
+        stock: z.number().int().min(0, "Stock must be zero or a positive number").optional(),
+});
+
 
 const authSchema = {
     register,
@@ -86,6 +109,7 @@ const authSchema = {
     resetPassword,
     forgot_Password,
     order,
+    recipe,
     };
 
 export default authSchema;
