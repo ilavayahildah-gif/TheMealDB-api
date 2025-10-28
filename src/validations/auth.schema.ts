@@ -8,7 +8,7 @@ const passwordSchema = z
     .regex(/[0-9]/, "Password must include at least one number")
     .regex(/[@$!%*?&]/, "Password must include at least one special character");
 
-const usernameSchema = z
+const nameSchema = z
     .string()
     .min(6, "Username must be at least 6 characters long")
     .max(20, "Username must not exceed 20 characters")
@@ -22,6 +22,9 @@ const usernameSchema = z
     .refine((value: string) => !/[@$!%*?&]/.test(value), {
         message: "Username cannot contain speciaL characters like @$!%*?&",
     });
+
+    const first_name = nameSchema;
+    const last_name = nameSchema;
 
     //login schema
 const login = z.object({
