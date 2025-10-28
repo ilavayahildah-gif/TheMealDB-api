@@ -11,13 +11,18 @@ export class OrderController {
     const { mealId, recipeId, quantity } = req.body;
 
     if (!mealId && !recipeId)
-      return res.status(400).json({ error: "Either mealId or recipeId is required" });
+      return res
+        .status(400)
+        .json({ error: "Either mealId or recipeId is required" });
 
     if (!quantity || quantity <= 0)
       return res.status(400).json({ error: "Quantity must be greater than 0" });
 
     try {
-      let item, stock = 0, price = 0, itemType = "";
+      let item,
+        stock = 0,
+        price = 0,
+        itemType = "";
 
       if (mealId) {
         item = await prisma.meal.findUnique({ where: { id: mealId } });
@@ -30,17 +35,19 @@ export class OrderController {
       if (!item)
         return res.status(404).json({ error: `${itemType} not found` });
 
-      if (item.stock < quantity)
-        return res.status(400).json({
-          error: `Not enough stock for this ${itemType}. Available: ${item.stock}`,
-        });
+      if ("stock" in item && typeof item.stock === "number") {
+        if (item.stock < quantity)
+          return res.status(400).json({
+            error: `Not enough stock for this ${itemType}. Available: ${item.stock}`,
+          });
+      }
 
       // calculate price (can be dynamic later)
       price = (itemType === "meal" ? 8.5 : 10.0) * quantity;
 
       //Use transaction to ensure stock & order remain consistent
       const [updatedItem, newOrder] = await prisma.$transaction([
-        prisma[itemType].update({
+        (prisma as any)[itemType].update({
           where: { id: item.id },
           data: { stock: { decrement: quantity } },
         }),
@@ -63,7 +70,9 @@ export class OrderController {
       });
     } catch (error: any) {
       console.error(error);
-      res.status(500).json({ error: "Internal server error", details: error.message });
+      res
+        .status(500)
+        .json({ error: "Internal server error", details: error.message });
     }
   }
 
@@ -98,12 +107,12 @@ export class OrderController {
 
       await prisma.$transaction(async (tx) => {
         if (order.mealId) {
-          await tx.meal.update({
+          await (tx.meal as any).update({
             where: { id: order.mealId },
             data: { stock: { increment: order.quantity } },
           });
         } else if (order.recipeId) {
-          await tx.recipe.update({
+          await (tx.recipe as any).update({
             where: { id: order.recipeId },
             data: { stock: { increment: order.quantity } },
           });
