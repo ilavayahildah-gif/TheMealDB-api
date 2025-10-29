@@ -6,12 +6,12 @@ export const addSupplier = async (req: Request, res: Response) => {
         const supplier = await prisma.supplier.create({ data: req.body });
         res.status(201).json({ message: "Supplier added", data: supplier });
     } catch (err) {
-        res.status(400).json({ error: err.message });
+        res.status(400).json({ error: (err as Error).message });
     }
     };
 
     export const getSupplierProducts = async (req: Request, res: Response) => {
     const { supplierId } = req.params;
-    const products = await prisma.meal.findMany({ where: { supplierId } });
-    res.json(products);
+    const meals = await prisma.meal.findMany({ where: { supplierId } });
+    res.json(meals);
 };
