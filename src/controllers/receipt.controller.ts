@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { generateReceipt } from "../utils/receiptGenerator.utils";
-import { prisma } from "../prisma";
+import prisma from "../config/prisma";
 
 export class ReceiptController {
   static async generate(req: Request, res: Response) {

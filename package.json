@@ -17,8 +17,10 @@
     "@types/jsonwebtoken": "^9.0.10",
     "@types/multer": "^2.0.0",
     "@types/node": "^24.7.2",
+    "@types/nodemailer": "^7.0.3",
     "@types/passport": "^1.0.17",
     "@types/passport-google-oauth20": "^2.0.16",
+    "@types/pdfkit": "^0.17.3",
     "@types/pg": "^8.15.5",
     "@types/utils": "file:types/zod@types/v4@types/locales",
     "express-rate-limit": "^8.1.0",
@@ -36,10 +38,12 @@
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
+    "node-cron": "^4.2.1",
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
     "pdfkit": "^0.17.2",
     "pg": "^8.16.3",
-    "pool": "^0.4.1"
+    "pool": "^0.4.1",
+    "socket.io": "^4.8.1"
   }
 }
