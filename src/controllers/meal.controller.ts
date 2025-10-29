@@ -1,9 +1,34 @@
-import { Response } from "express";
+import { Request,Response } from "express";
 import { AuthRequest } from "../middleware/jwtauth.middleware";
 import { PrismaClient } from "@prisma/client";
+import { getRecommendedMeals } from "@utils/recommendation.utils";
 
 const prisma = new PrismaClient();
 
+// Define route params type
+interface MealParams {
+    id: string;
+    }
+
+    export const recommendMeals = async (req: Request<MealParams>, res: Response) => {
+    try {
+        const { id } = req.params;
+
+        // Fetch recommendations safely
+        const recommended = await getRecommendedMeals(id);
+
+        res.status(200).json({
+        message: "Recommended products",
+        data: recommended,
+        });
+    } catch (error) {
+        console.error("Error fetching recommendations:", error);
+        res.status(500).json({
+        message: "Failed to fetch recommended meals",
+        error,
+        });
+    }
+}
 export class MealController {
   //Create a meal
     static async createMeal(req: AuthRequest, res: Response) {
