@@ -14,7 +14,7 @@ model User {
   last_name  String
   email      String   @unique
   password   String
-  created_at  DateTime @default(now())
+  created_at DateTime @default(now())
 
   // Relation: one user → many meals
   meals   Meal[]
@@ -23,18 +23,22 @@ model User {
 }
 
 model Meal {
-  id        Int      @id @default(autoincrement())
-  name      String
-  calories  Int?
-  notes     String?
-  stock     Int      @default(20) //default meal stock
+  id         Int      @id @default(autoincrement())
+  name       String
+  calories   Int?
+  notes      String?
+  stock      Int      @default(20) //default meal stock
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
-  user_id   Int
+  user_id    Int
+  supplierId String?
+  bestBefore DateTime
+  verified   Boolean  @default(false)
 
   //relation back to user
-  user   User    @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  orders Order[]
+  user     User      @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  orders   Order[]
+  supplier Supplier? @relation(fields: [supplierId], references: [id])
 }
 
 model Recipe {
@@ -45,7 +49,8 @@ model Recipe {
   ingredients  String
   instructions String
   stock        Int      @default(15) //default recipe stock
-  created_at    DateTime @default(now())
+  created_at   DateTime @default(now())
+  bestBefore   DateTime
 
   //relation back to user
   user  User    @relation(fields: [userId], references: [id])
@@ -60,10 +65,18 @@ model Order {
   quantity   Int
   totalPrice Float
   status     String   @default("pending")
-  created_at  DateTime @default(now())
+  created_at DateTime @default(now())
 
   //relations
   user   User    @relation(fields: [userId], references: [id])
   meal   Meal?   @relation(fields: [mealId], references: [id])
   recipe Recipe? @relation(fields: [recipeId], references: [id])
+}
+
+model Supplier {
+  id    String  @id @default(uuid())
+  name  String
+  email String  @unique
+  phone String?
+  meals Meal[]
 }
